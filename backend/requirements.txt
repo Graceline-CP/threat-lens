@@ -1,4 +1,4 @@
-# ─── Web Framework ────────────────────────────────────────────────────────────
+# Web Framework
 fastapi==0.111.0
 uvicorn[standard]==0.29.0
 python-multipart==0.0.9
@@ -6,31 +6,29 @@ pydantic==2.7.1
 pydantic-settings==2.2.1
 python-dotenv==1.0.1
 
-# ─── Firebase Admin (server-side token verification) ──────────────────────────
+# Firebase Admin
 firebase-admin==6.5.0
 
-# ─── NLP ──────────────────────────────────────────────────────────────────────
+# NLP
 transformers==4.41.0
-torch==2.3.0
-torchvision==0.18.0
 sentencepiece==0.2.0
 
-# ─── Computer Vision ──────────────────────────────────────────────────────────
-opencv-python-headless==4.9.0.80
+# Image
 Pillow==10.3.0
 numpy==1.26.4
+opencv-python-headless==4.9.0.80
 
-# ─── OCR ──────────────────────────────────────────────────────────────────────
+# OCR
 easyocr==1.7.1
 
-# ─── URL Analysis ─────────────────────────────────────────────────────────────
+# URL Analysis
 requests==2.32.2
 python-whois==0.9.4
 beautifulsoup4==4.12.3
 lxml==5.2.2
 
-# ─── Report Generation ────────────────────────────────────────────────────────
+# Report
 reportlab==4.2.0
 
-# ─── Rate Limiting ────────────────────────────────────────────────────────────
+# Rate Limiting
 slowapi==0.1.9
