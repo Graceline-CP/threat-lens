@@ -67,3 +67,6 @@ node_modules/
 
 # dataconnect generated files
 .dataconnect
+
+backend/venv/
+frontend/node_modules/
