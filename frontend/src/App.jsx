@@ -7,6 +7,8 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
+import { useScanHistory } from "./hooks/useScanHistory";
+import { HistoryScreen } from "./components/HistoryScreen";
 
 const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:8000/api";
 
@@ -400,7 +402,7 @@ const AuthScreen = ({ onAuth }) => {
 };
 
 // ─── SCREEN: HOME ────────────────────────────────────────────────────────────
-const HomeScreen = ({ user, onSelect, onSignOut }) => {
+const HomeScreen = ({ user, onSelect, onSignOut, onHistory }) => {
   const cards = [
     { type: "url", icon: "🔗", title: "URL Scanner", desc: "Paste any link to check for phishing, malware, or suspicious redirects." },
     { type: "image", icon: "🖼", title: "Image Analysis", desc: "Upload screenshots, QR codes, or images to detect hidden threats." },
@@ -421,6 +423,7 @@ const HomeScreen = ({ user, onSelect, onSignOut }) => {
         <Logo size={22} />
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <span style={{ fontSize: 13, color: C.muted }}>{user?.email}</span>
+          <Btn variant="muted" onClick={onHistory} style={{ padding: "8px 16px", fontSize: 13 }}>🕘 History</Btn>
           <Btn variant="ghost" onClick={onSignOut} style={{ padding: "8px 16px", fontSize: 13 }}>Sign Out</Btn>
         </div>
       </nav>
@@ -809,6 +812,7 @@ export default function App() {
   const [user, setUser] = useState(null);
   const [scanType, setScanType] = useState(null);
   const [result, setResult] = useState(null);
+  const { history, loading: historyLoading, addResult, clearHistory } = useScanHistory(user);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, u => {
@@ -845,6 +849,7 @@ export default function App() {
       }
 
       setResult(res);
+      addResult(res);
       setScreen("results");
     } catch (err) {
       console.error(err);
@@ -909,6 +914,16 @@ export default function App() {
           user={user}
           onSelect={t => { setScanType(t); setScreen("input"); }}
           onSignOut={() => { signOut(auth); setScreen("landing"); }}
+          onHistory={() => setScreen("history")}
+        />
+      )}
+      {screen === "history" && (
+        <HistoryScreen
+          history={history}
+          loading={historyLoading}
+          onReview={item => { setResult(item); setScreen("results"); }}
+          onClear={clearHistory}
+          onBack={() => setScreen("home")}
         />
       )}
       {screen === "input" && (
