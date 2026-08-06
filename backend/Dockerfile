@@ -8,16 +8,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 
 # Install CPU-only torch first (smaller, faster build)
-RUN pip install --no-cache-dir torch==2.11.0 torchvision==0.12.0 --index-url https://download.pytorch.org/whl/cpu
-
+RUN pip install --no-cache-dir torch torchvision --index-url https://download.pytorch.org/whl/cpu
 # Install rest of dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy source code
+# Copy source code (includes phishtank_urls.db, main.py, etc.)
 COPY . .
 
-# Hugging Face Spaces uses port 7860
-EXPOSE 7860
+# Cloud Run injects PORT env var, default 8080
+ENV PORT=8080
+EXPOSE 8080
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "7860"]
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT}"]
