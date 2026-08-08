@@ -10,7 +10,7 @@ import {
 import { useScanHistory } from "./hooks/useScanHistory";
 import { HistoryScreen } from "./components/HistoryScreen";
 
-const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:8000/api";
+const API_BASE = import.meta.env.REACT_APP_API_URL || "http://localhost:8000/api";
 
 // ─── DESIGN TOKENS ──────────────────────────────────────────────────────────
 const C = {
@@ -830,21 +830,25 @@ export default function App() {
       if (type === "url") {
         const r = await fetch(`${API_BASE}/analyze/url`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true" },
           body: JSON.stringify({ url: value })
         });
         res = await r.json();
       } else if (type === "text") {
         const r = await fetch(`${API_BASE}/analyze/text`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true" },
           body: JSON.stringify({ text: value })
         });
         res = await r.json();
       } else if (type === "image") {
         const formData = new FormData();
         formData.append("file", file);
-        const r = await fetch(`${API_BASE}/analyze/image`, { method: "POST", body: formData });
+        const r = await fetch(`${API_BASE}/analyze/image`, {
+          method: "POST",
+          headers: { "ngrok-skip-browser-warning": "true" },
+          body: formData
+        });        
         res = await r.json();
       }
 
@@ -867,7 +871,7 @@ export default function App() {
     try {
       const r = await fetch(`${API_BASE}/report/download`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true" },
         body: JSON.stringify({
           analysis_type: result.analysis_type,
           input_data: result.input,
@@ -877,7 +881,6 @@ export default function App() {
           red_flags: result.red_flags || []
         })
       });
-
       if (!r.ok) {
         const errText = await r.text();
         alert(`Report generation failed: ${errText}`);
