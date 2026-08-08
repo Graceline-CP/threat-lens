@@ -10,7 +10,7 @@ import {
 import { useScanHistory } from "./hooks/useScanHistory";
 import { HistoryScreen } from "./components/HistoryScreen";
 
-const API_BASE = import.meta.env.REACT_APP_API_URL || "http://localhost:8000/api";
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
 
 // ─── DESIGN TOKENS ──────────────────────────────────────────────────────────
 const C = {
